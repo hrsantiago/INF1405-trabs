@@ -7,3 +7,9 @@ Desenvolvido por:
 Professor:
 
 - Edmundo Torreão
+
+
+## Run
+
+- npm install
+- npm start
