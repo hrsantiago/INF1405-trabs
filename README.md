@@ -9,7 +9,8 @@ Professor:
 - Edmundo Torreão
 
 
-## Run
+## Initalize and Run
 
+- npm install -g supervisor
 - npm install
-- npm start
+- supervisor ./bin/www

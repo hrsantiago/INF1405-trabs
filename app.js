@@ -5,10 +5,23 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mysql = require('mysql');
+var connection  = require('express-myconnection');
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+app.use(
+  connection(mysql,{
+    host: 'localhost',
+    user: 'root',
+    password : '',
+    port : 3306, //port mysql
+    database:'transmissionlines'
+  },'request')
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

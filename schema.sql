@@ -21,28 +21,28 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS company;
 
 CREATE TABLE company (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   name TEXT NOT NULL
 );
 
 CREATE TABLE user (
-  id INTEGER PRIMARY KEY,
-  company_id INTEGER NOT NULL,
-  email VARCHAR(80) NOT NULL,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  company_id INTEGER,
+  email VARCHAR(80) UNIQUE NOT NULL,
   password TEXT NOT NULL,
   name TEXT NOT NULL,
   FOREIGN KEY(company_id) REFERENCES company(id)
 );
 
 CREATE TABLE project (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   owner_id INTEGER NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(owner_id) REFERENCES user(id)
 );
 
 CREATE TABLE project_revision (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_id INTEGER NOT NULL,
   client_id INTEGER NOT NULL,
   designer_id INTEGER NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE project_revision (
 );
 
 CREATE TABLE transmission_line (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   frequency REAL NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE transmission_line (
 );
 
 CREATE TABLE structure (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   utm_x REAL NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE structure (
 );
 
 CREATE TABLE circuit_type (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
   nominal_voltage REAL NOT NULL,
   maximum_voltage REAL NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE circuit_type (
 );
 
 CREATE TABLE shield_wire_type (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
   x REAL NOT NULL,
   y REAL NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE shield_wire_type (
 );
 
 CREATE TABLE phase (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   circuit_id INTEGER NOT NULL,
   x REAL NOT NULL,
   y REAL NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE cabling (
 );
 
 CREATE TABLE cable_type (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   owner_id INTEGER NOT NULL,
   code TEXT NOT NULL,
   size TEXT NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE cable_type (
 );
 
 CREATE TABLE cable (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   type_id INTEGER NOT NULL,
   x REAL NOT NULL,
   y REAL NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE bundle (
 );
 
 CREATE TABLE profile (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   initial_x REAL NOT NULL,
   final_x REAL NOT NULL,
   increment_x REAL NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE profile (
 );
 
 CREATE TABLE audible_noise (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE audible_noise (
 );
 
 CREATE TABLE electric_field (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
@@ -177,7 +177,7 @@ CREATE TABLE electric_field (
 );
 
 CREATE TABLE magnetic_field (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
@@ -186,7 +186,7 @@ CREATE TABLE magnetic_field (
 );
 
 CREATE TABLE radio_interference (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
@@ -195,13 +195,13 @@ CREATE TABLE radio_interference (
 );
 
 CREATE TABLE file (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   name TEXT NOT NULL,
   data BLOB NOT NULL
 );
 
 CREATE TABLE document (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_revision_id INTEGER NOT NULL,
   file_id INTEGER,
   designer_number TEXT NOT NULL,
@@ -221,3 +221,7 @@ CREATE TABLE document_template (
   FOREIGN KEY(document_id) REFERENCES document(id),
   FOREIGN KEY(file_id) REFERENCES file(id)
 );
+
+-- Default values
+INSERT INTO company (name) VALUES ('Fluxo Engenharia');
+INSERT INTO company (name) VALUES ('Cymi');
