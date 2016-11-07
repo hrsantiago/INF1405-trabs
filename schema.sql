@@ -225,3 +225,5 @@ CREATE TABLE document_template (
 -- Default values
 INSERT INTO company (name) VALUES ('Fluxo Engenharia');
 INSERT INTO company (name) VALUES ('Cymi');
+
+INSERT INTO user (email, password, name) VALUES ('henrique_santiago93@hotmail.com', '123456', 'Henrique Santiago');
