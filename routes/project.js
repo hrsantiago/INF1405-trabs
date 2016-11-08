@@ -1,15 +1,15 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Transmission Lines - Home' });
 
   req.getConnection(function(err,connection) {
     connection.query('SELECT * FROM company',[],function(err,result){
       if(err)
         return res.status(400).json(err);
-      return res.status(200).json(result);
+      res.render('project', { title: 'Transmission Lines - Project', message: JSON.stringify(result) });
     });
   });
 

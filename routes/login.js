@@ -4,15 +4,11 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  var text = "";
-  text += "<p>" + req.flash('loginMessage') + "</p>";
-  text += "<p>Please login!</p><form method='post' action='/login'><input type='text' name='username' value='henrique_santiago93@hotmail.com'/><input type='password' name='password'/><button type='submit' value='submit'>Submit</buttom></form>";
-
-  res.send(text);
+  res.render('login', { title: 'Transmission Lines - Login', message: req.flash('loginMessage') });
 });
 
 router.post("/", passport.authenticate("local-login", { failureRedirect: "/login", failureFlash : true }), function (req, res) {
-  res.redirect("/content");
+  res.redirect("/project");
 });
 
 module.exports = router;
