@@ -1,18 +1,15 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Transmission Lines - Home' });
-
-  req.getConnection(function(err,connection) {
-    connection.query('SELECT * FROM company',[],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-      return res.status(200).json(result);
-    });
-  });
-
+  res.render('index', { title: 'Transmission Lines', message: req.flash('loginMessage') });
 });
+
+router.post("/", passport.authenticate("local-login", { failureRedirect: "/", failureFlash : true }), function (req, res) {
+  res.redirect("/project");
+});
+
 
 module.exports = router;

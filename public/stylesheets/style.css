@@ -1,8 +1,17 @@
 body {
-  padding: 50px;
+  padding: 50px 10px 10px 10px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.bg {
+  background: url(../images/bg_1920.jpg) no-repeat center center fixed; 
+  background-size: cover;
+}
+
+form input, form button {
+  margin: 16px 0;
 }

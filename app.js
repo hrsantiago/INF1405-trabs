@@ -15,7 +15,7 @@ var flash = require('connect-flash');
 require('./config/passport')(passport);
 
 var index = require('./routes/index');
-var login = require('./routes/login');
+var logout = require('./routes/logout');
 var project = require('./routes/project');
 
 var app = express();
@@ -48,7 +48,7 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', index);
-app.use('/login', login);
+app.use('/logout', logout);
 app.use('/project', project);
 
 // catch 404 and forward to error handler

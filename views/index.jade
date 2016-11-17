@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  body.bg
+    .container
+      if message.length > 0
+        .alert.alert-danger #{message}
+      div.panel.panel-default
+        div.panel-body
+          form(action="/", method="post")
+            img.img-responsive.center-block(src="images/logo.jpg")
+            input.form-control(type="text", name="username", placeholder="Email address" value="henrique_santiago93@hotmail.com")
+            input.form-control(type="password", name="password", placeholder="Password" value="123456")
+            button.btn.btn-primary.btn-block(type="submit") Sign in
