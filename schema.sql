@@ -37,6 +37,7 @@ CREATE TABLE user (
 CREATE TABLE project (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   owner_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(owner_id) REFERENCES user(id)
 );
@@ -227,3 +228,7 @@ INSERT INTO company (name) VALUES ('Fluxo Engenharia');
 INSERT INTO company (name) VALUES ('Cymi');
 
 INSERT INTO user (email, password, name) VALUES ('henrique_santiago93@hotmail.com', '123456', 'Henrique Santiago');
+
+INSERT INTO project (owner_id, name) VALUES (1, 'Projeto Básico Mantiqueira');
+INSERT INTO project (owner_id, name) VALUES (1, 'Projeto Básico Esperanza');
+INSERT INTO project_revision (project_id, client_id, designer_id) VALUES(1, 2, 1);

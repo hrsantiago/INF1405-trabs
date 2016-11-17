@@ -2,6 +2,24 @@ extends layout
 
 block content
   body
+    include projectnav
     .container
-      a.btn.btn-large.btn-primary(href="/logout") Logout
-      .alert #{message}
+      h3 #{project.name}
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/", method="post")
+            label Name
+            input.form-control(type="text", name="name", placeholder="Name", value="#{project.name}")
+            label Created
+            input.form-control(type="text", name="name", placeholder="Name", value="#{project.created}", disabled)
+
+      div.panel.panel-default
+        div.panel-heading Transmission Lines
+        div.panel-body
+          form(action="/", method="post")
+            label Name
+            input.form-control(type="text", name="name", placeholder="Name", value="#{project.name}")
+            label Created
+            input.form-control(type="text", name="name", placeholder="Name", value="#{project.created}", disabled)

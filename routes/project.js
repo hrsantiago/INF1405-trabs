@@ -4,19 +4,35 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  if(!req.isAuthenticated()) {
+    res.redirect('/');
+    return;
+  }
 
-  if(req.isAuthenticated()) {
-    req.getConnection(function(err,connection) {
-    connection.query('SELECT * FROM company',[],function(err,result){
-        if(err)
-          return res.status(400).json(err);
-        res.render('project', { title: 'Transmission Lines - Project', message: JSON.stringify(result) });
-      });
+  req.getConnection(function(err,connection) {
+  connection.query('SELECT * FROM project',[],function(err,result){
+      if(err)
+        return res.status(400).json(err);
+      res.render('projects', { title: 'Transmission Lines - Project', message: JSON.stringify(result), user: req.user, projects: result });
     });
+  });
+});
+
+router.get('/:id', function(req, res, next) {
+  if(!req.isAuthenticated()) {
+    res.redirect('/');
+    return;
   }
-  else {
-    res.redirect('/login');
-  }
+
+  var projectId = req.params.id;
+
+  req.getConnection(function(err,connection) {
+  connection.query('SELECT * FROM project WHERE id = ? AND owner_id = ?',[projectId, req.user.id],function(err,result){
+      if(err)
+        return res.status(400).json(err);
+      res.render('project', { title: 'Transmission Lines - Project', message: JSON.stringify(result), user: req.user, project: result[0] });
+    });
+  });
 });
 
 module.exports = router;
