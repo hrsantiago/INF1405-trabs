@@ -15,7 +15,6 @@ DROP TABLE IF EXISTS shield_wire_type;
 DROP TABLE IF EXISTS circuit_type;
 DROP TABLE IF EXISTS structure;
 DROP TABLE IF EXISTS transmission_line;
-DROP TABLE IF EXISTS project_revision;
 DROP TABLE IF EXISTS project;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS company;
@@ -39,23 +38,17 @@ CREATE TABLE project (
   owner_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(owner_id) REFERENCES user(id)
-);
-
-CREATE TABLE project_revision (
-  id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_id INTEGER NOT NULL,
-  client_id INTEGER NOT NULL,
-  designer_id INTEGER NOT NULL,
+  client_id INTEGER,
+  designer_id INTEGER,
   description TEXT NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(owner_id) REFERENCES user(id),
   FOREIGN KEY(client_id) REFERENCES company(id),
   FOREIGN KEY(designer_id) REFERENCES company(id)
 );
 
 CREATE TABLE transmission_line (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   frequency REAL NOT NULL,
   average_rainfall REAL NOT NULL,
@@ -63,7 +56,7 @@ CREATE TABLE transmission_line (
   relative_air_density_90 REAL NOT NULL,
   max_circuits INTEGER NOT NULL,
   max_shield_wires INTEGER NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id)
+  FOREIGN KEY(project_id) REFERENCES project(id)
 );
 
 CREATE TABLE structure (
@@ -161,37 +154,37 @@ CREATE TABLE profile (
 
 CREATE TABLE audible_noise (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE electric_field (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE magnetic_field (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE radio_interference (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -203,7 +196,7 @@ CREATE TABLE file (
 
 CREATE TABLE document (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_revision_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
   file_id INTEGER,
   designer_number TEXT NOT NULL,
   client_number TEXT NOT NULL,
@@ -211,7 +204,7 @@ CREATE TABLE document (
   developer TEXT NOT NULL,
   checker TEXT NOT NULL,
   approver TEXT NOT NULL,
-  FOREIGN KEY(project_revision_id) REFERENCES project_revision(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(file_id) REFERENCES file(id)
 );
 
@@ -229,6 +222,5 @@ INSERT INTO company (name) VALUES ('Cymi');
 
 INSERT INTO user (email, password, name) VALUES ('henrique_santiago93@hotmail.com', '123456', 'Henrique Santiago');
 
-INSERT INTO project (owner_id, name) VALUES (1, 'Projeto Básico Mantiqueira');
-INSERT INTO project (owner_id, name) VALUES (1, 'Projeto Básico Esperanza');
-INSERT INTO project_revision (project_id, client_id, designer_id) VALUES(1, 2, 1);
+INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Mantiqueira', 2, 1);
+INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Esperanza', 2, 1);

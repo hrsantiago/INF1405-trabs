@@ -18,6 +18,38 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/add', function(req, res, next) {
+  if(!req.isAuthenticated()) {
+    res.redirect('/');
+    return;
+  }
+
+  req.getConnection(function(err,connection) {
+  connection.query('INSERT INTO project (owner_id, name) VALUES (?, ?)',[req.user.id, 'New project'],function(err,result){
+      if(err)
+        return res.status(400).json(err);
+      res.redirect('/project');
+    });
+  });
+});
+
+router.get('/remove/:id', function(req, res, next) {
+  if(!req.isAuthenticated()) {
+    res.redirect('/');
+    return;
+  }
+
+  var projectId = req.params.id;
+
+  req.getConnection(function(err,connection) {
+  connection.query('DELETE FROM project WHERE id = ? and owner_id = ?',[projectId, req.user.id],function(err,result){
+      if(err)
+        return res.status(400).json(err);
+      res.redirect('/project');
+    });
+  });
+});
+
 router.get('/:id', function(req, res, next) {
   if(!req.isAuthenticated()) {
     res.redirect('/');
