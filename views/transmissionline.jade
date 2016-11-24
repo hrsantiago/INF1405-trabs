@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 #{transmissionLine.name}
+        span &nbsp;
+        a.btn.btn-default(href="/project/" + transmissionLine.project_id) Back
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/transmissionline/" + transmissionLine.id + "/save", method="post")
+            label Name
+            input.form-control(type="text", name="name", placeholder="Name", value="#{transmissionLine.name}")
+            label Frequency (Hz)
+            input.form-control(type="text", name="frequency", value="#{transmissionLine.frequency}")
+            label Average rainfall (mm/h)
+            input.form-control(type="text", name="average_rainfall", value="#{transmissionLine.average_rainfall}")
+            label Relative air density 50%
+            input.form-control(type="text", name="relative_air_density_50", value="#{transmissionLine.relative_air_density_50}")
+            label Relative air density 90%
+            input.form-control(type="text", name="relative_air_density_90", value="#{transmissionLine.relative_air_density_90}")
+            label Max circuits
+            input.form-control(type="text", name="max_circuits", value="#{transmissionLine.max_circuits}")
+            label Max shield wires
+            input.form-control(type="text", name="max_shield_wires", value="#{transmissionLine.max_shield_wires}")
+            button.btn.btn-primary(type="submit") Save

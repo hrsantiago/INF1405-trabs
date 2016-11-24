@@ -5,21 +5,39 @@ block content
     include projectnav
     .container
       h3 #{project.name}
+        span &nbsp;
+        a.btn.btn-default(href="/project") Back
 
       div.panel.panel-default
         div.panel-heading General
         div.panel-body
-          form(action="/", method="post")
+          form(action="/project/" + project.id + "/save", method="post")
             label Name
             input.form-control(type="text", name="name", placeholder="Name", value="#{project.name}")
             label Created
-            input.form-control(type="text", name="name", placeholder="Name", value="#{project.created}", disabled)
+            input.form-control(type="text", name="created", value="#{project.created}", disabled)
+            label Client
+            input.form-control(type="text", name="client", value="#{project.client_id}", disabled)
+            label Designer
+            input.form-control(type="text", name="designer", value="#{project.designer_id}", disabled)
+            label Description
+            input.form-control(type="text", name="description", value="#{project.description}")
+            button.btn.btn-primary(type="submit") Save
 
       div.panel.panel-default
         div.panel-heading Transmission Lines
         div.panel-body
-          form(action="/", method="post")
-            label Name
-            input.form-control(type="text", name="name", placeholder="Name", value="#{project.name}")
-            label Created
-            input.form-control(type="text", name="name", placeholder="Name", value="#{project.created}", disabled)
+          table.table
+            tr
+              th #
+              th Name
+              th
+            - each transmissionLine in transmissionLines
+              tr
+                td #{transmissionLine.id}
+                td #{transmissionLine.name}
+                td
+                  a.btn.btn-default(href="/transmissionline/#{transmissionLine.id}") Edit
+                  span &nbsp;
+                  a.btn.btn-danger(href="/transmissionline/remove/#{transmissionLine.id}") Remove
+          a.btn.btn-default(href="/transmissionline/add/" + project.id) New Transmission Line

@@ -8,7 +8,7 @@ block content
       table.table
         tr
           th #
-          th Projeto
+          th Project
           th Created
           th
         - each project in projects
@@ -18,6 +18,6 @@ block content
             td #{project.created}
             td
               a.btn.btn-default(href="/project/#{project.id}") Edit
-              &nbsp;
+              span &nbsp; 
               a.btn.btn-danger(href="/project/remove/#{project.id}") Remove
       a.btn.btn-default(href="/project/add") New project

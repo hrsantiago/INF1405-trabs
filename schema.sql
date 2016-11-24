@@ -50,12 +50,12 @@ CREATE TABLE transmission_line (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   project_id INTEGER NOT NULL,
   name TEXT NOT NULL,
-  frequency REAL NOT NULL,
-  average_rainfall REAL NOT NULL,
-  relative_air_density_50 REAL NOT NULL,
-  relative_air_density_90 REAL NOT NULL,
-  max_circuits INTEGER NOT NULL,
-  max_shield_wires INTEGER NOT NULL,
+  frequency REAL NOT NULL DEFAULT 60,
+  average_rainfall REAL NOT NULL DEFAULT 10,
+  relative_air_density_50 REAL NOT NULL DEFAULT 1,
+  relative_air_density_90 REAL NOT NULL DEFAULT 1,
+  max_circuits INTEGER NOT NULL DEFAULT 1,
+  max_shield_wires INTEGER NOT NULL DEFAULT 0,
   FOREIGN KEY(project_id) REFERENCES project(id)
 );
 
@@ -224,3 +224,6 @@ INSERT INTO user (email, password, name) VALUES ('henrique_santiago93@hotmail.co
 
 INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Mantiqueira', 2, 1);
 INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Esperanza', 2, 1);
+
+INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
+  VALUES (2, 'LT 500 kV Açu III - João Câmara III', 60, 10, 0.9, 0.9, 1, 2);
