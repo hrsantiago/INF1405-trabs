@@ -2,28 +2,25 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 
+router.use(function(req, res, next) {
+  if(!req.isAuthenticated())
+    res.redirect('/');
+  else
+    next();
+});
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   req.getConnection(function(err,connection) {
-    connection.query('SELECT * FROM project',[],function(err,result){
+    connection.query('SELECT * FROM project WHERE owner_id = ?',[req.user.id],function(err,result){
       if(err)
         return res.status(400).json(err);
-      res.render('projects', { title: 'Transmission Lines - Project', message: JSON.stringify(result), user: req.user, projects: result });
+      res.render('projects', { title: 'Transmission Lines - Project', user: req.user, projects: result });
     });
   });
 });
 
 router.get('/add', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   req.getConnection(function(err,connection) {
     connection.query('INSERT INTO project (owner_id, name) VALUES (?, ?)',[req.user.id, 'New project'],function(err,result){
       if(err)
@@ -35,11 +32,6 @@ router.get('/add', function(req, res, next) {
 });
 
 router.get('/remove/:id', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var projectId = req.params.id;
 
   req.getConnection(function(err,connection) {
@@ -52,11 +44,6 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var projectId = req.params.id;
 
   req.getConnection(function(err,connection) {
@@ -75,11 +62,6 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/:id/save', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var projectId = req.params.id;
 
   req.getConnection(function(err,connection) {

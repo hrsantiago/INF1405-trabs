@@ -2,14 +2,14 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 
-/* GET users listing. */
+router.use(function(req, res, next) {
+  if(!req.isAuthenticated())
+    res.redirect('/');
+  else
+    next();
+});
 
 router.get('/add/:projectId', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var projectId = req.params.projectId;
 
   req.getConnection(function(err,connection) {
@@ -23,11 +23,6 @@ router.get('/add/:projectId', function(req, res, next) {
 });
 
 router.get('/remove/:id', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var transmissionLineId = req.params.id;
 
   req.getConnection(function(err,connection) {
@@ -41,11 +36,6 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var transmissionLineId = req.params.id;
 
   req.getConnection(function(err,connection) {
@@ -59,11 +49,6 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/:id/save', function(req, res, next) {
-  if(!req.isAuthenticated()) {
-    res.redirect('/');
-    return;
-  }
-
   var transmissionLineId = req.params.id;
 
   req.getConnection(function(err,connection) {

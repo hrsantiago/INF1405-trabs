@@ -1,12 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+router.use(function(req, res, next) {
+  if(!req.isAuthenticated())
+    res.redirect('/');
+  else
+    next();
+});
 
-  if(req.isAuthenticated()) {
-    req.logout();
-  }
+router.get('/', function(req, res, next) {
+  req.logout();
   res.redirect('/');
 });
 
