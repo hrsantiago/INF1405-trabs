@@ -14,6 +14,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 require('./config/passport')(passport);
 
+require('./config/bookshelf');
+
 var index = require('./routes/index');
 var logout = require('./routes/logout');
 var project = require('./routes/project');

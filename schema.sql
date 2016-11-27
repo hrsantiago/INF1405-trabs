@@ -221,9 +221,16 @@ INSERT INTO company (name) VALUES ('Fluxo Engenharia');
 INSERT INTO company (name) VALUES ('Cymi');
 
 INSERT INTO user (email, password, name) VALUES ('henrique_santiago93@hotmail.com', '123456', 'Henrique Santiago');
+INSERT INTO user (email, password, name) VALUES ('teste@hotmail.com', '123456', 'Teste');
 
-INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Mantiqueira', 2, 1);
+INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (2, 'Projeto Básico Teste', 2, 1);
+INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
+  VALUES (1, 'LT 500 kV SE I - SE II', 60, 10, 0.9, 0.9, 1, 2);
+
 INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Esperanza', 2, 1);
-
 INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
   VALUES (2, 'LT 500 kV Açu III - João Câmara III', 60, 10, 0.9, 0.9, 1, 2);
+
+INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Teste', 2, 1);
+INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
+  VALUES (3, 'LT 500 kV SE I - SE II', 60, 10, 0.9, 0.9, 1, 2);

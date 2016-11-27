@@ -1,5 +1,5 @@
 var express = require('express');
-var passport = require('passport');
+var models = require('../config/models');
 var router = express.Router();
 
 router.use(function(req, res, next) {
@@ -9,69 +9,39 @@ router.use(function(req, res, next) {
     next();
 });
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-  req.getConnection(function(err,connection) {
-    connection.query('SELECT * FROM project WHERE owner_id = ?',[req.user.id],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-      res.render('projects', { title: 'Transmission Lines - Project', user: req.user, projects: result });
-    });
-  });
+  new models.Project().where({'owner_id' : req.user.id}).fetchAll().then(function(projects) {
+    res.render('projects', { user: req.user, projects: projects.toJSON() });
+  }).catch(function(err) { next(err); });
 });
 
 router.get('/add', function(req, res, next) {
-  req.getConnection(function(err,connection) {
-    connection.query('INSERT INTO project (owner_id, name) VALUES (?, ?)',[req.user.id, 'New project'],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-
-      res.redirect('/project/' + result.insertId);
-    });
-  });
+  new models.Project({owner_id: req.user.id, name: 'New project'}).save().then(function(project) {
+    res.redirect('/project/' + project.attributes.id);
+  }).catch(function(err) { next(err); });
 });
 
 router.get('/remove/:id', function(req, res, next) {
-  var projectId = req.params.id;
-
-  req.getConnection(function(err,connection) {
-    connection.query('DELETE FROM project WHERE id = ? AND owner_id = ?',[projectId, req.user.id],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-      res.redirect('/project');
-    });
-  });
+  new models.Project().where({id: req.params.id, owner_id: req.user.id}).destroy().then(function(project) {
+    res.redirect('/project');
+  }).catch(function(err) { next(err); });
 });
 
 router.get('/:id', function(req, res, next) {
-  var projectId = req.params.id;
-
-  req.getConnection(function(err,connection) {
-    connection.query('SELECT * FROM project WHERE id = ? AND owner_id = ?',[projectId, req.user.id],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-
-      connection.query('SELECT * FROM transmission_line WHERE project_id = ?',[projectId],function(err,result2){
-        if(err)
-          return res.status(400).json(err);
-
-        res.render('project', { title: 'Transmission Lines - Project', message: JSON.stringify(result), user: req.user, project: result[0], transmissionLines: result2 });
-      });
-    });
-  });
+  new models.Project().where({id: req.params.id, owner_id: req.user.id}).fetch({withRelated: ['transmissionLines'], require: true}).then(function(project) {
+    res.render('project', { user: req.user, project: project.toJSON(), transmissionLines: project.related('transmissionLines').toJSON() });
+  }).catch(function(err) { next(err); });
 });
 
 router.post('/:id/save', function(req, res, next) {
-  var projectId = req.params.id;
+  var body = {
+    name: req.body.name,
+    description: req.body.description,
+  };
 
-  req.getConnection(function(err,connection) {
-    connection.query('UPDATE project SET name = ?, description = ? WHERE id = ? AND owner_id = ?',
-    [req.body.name, req.body.description, projectId, req.user.id],function(err,result){
-      if(err)
-        return res.status(400).json(err);
-      res.redirect("/project/" + projectId);
-    });
-  });
+  new models.Project().where({id: req.params.id, owner_id: req.user.id}).save(body, {patch: true}).then(function(project) {
+    res.redirect("/project/" + req.params.id);
+  }).catch(function(err) { next(err); });
 });
 
 module.exports = router;
