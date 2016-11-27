@@ -27,3 +27,39 @@ block content
             label Max shield wires
             input.form-control(type="text", name="max_shield_wires", value="#{transmissionLine.max_shield_wires}")
             button.btn.btn-primary(type="submit") Save
+
+      div.panel.panel-default
+        div.panel-heading Circuits
+        div.panel-body
+          table.table
+            tr
+              th #
+              th Voltage
+              th
+            - each circuit in circuits
+              tr
+                td #{circuit.id}
+                td #{circuit.nominal_voltage} kV
+                td
+                  a.btn.btn-default(href="/circuit/#{circuit.id}") Edit
+                  span &nbsp;
+                  a.btn.btn-danger(href="/circuit/remove/#{circuit.id}") Remove
+          a.btn.btn-default(href="/circuit/add/" + transmissionLine.id) New Circuit
+
+      div.panel.panel-default
+        div.panel-heading Shield Wires
+        div.panel-body
+          table.table
+            tr
+              th #
+              th Name
+              th
+            - each shieldWire in shieldWires
+              tr
+                td #{shieldWire.id}
+                td (#{shieldWire.x} ; #{shieldWire.y}) m
+                td
+                  a.btn.btn-default(href="/shieldwire/#{shieldWire.id}") Edit
+                  span &nbsp;
+                  a.btn.btn-danger(href="/shieldwire/remove/#{shieldWire.id}") Remove
+          a.btn.btn-default(href="/shieldwire/add/" + transmissionLine.id) New Shield Wire

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 #{circuit.nominal_voltage} kV
+        span &nbsp;
+        a.btn.btn-default(href="/transmissionline/" + circuit.transmission_line_id) Back
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/circuit/" + circuit.id + "/save", method="post")
+            label Nominal voltage (kV)
+            input.form-control(type="text", name="nominal_voltage", value="#{circuit.nominal_voltage}")
+            label Maximum voltage (kV)
+            input.form-control(type="text", name="maximum_voltage", value="#{circuit.maximum_voltage}")
+            label Short term current capacity (A)
+            input.form-control(type="text", name="short_term_current_capacity", value="#{circuit.short_term_current_capacity}")
+            label Conductor surface factor
+            input.form-control(type="text", name="conductor_surface_factor", value="#{circuit.conductor_surface_factor}")
+            label Conductor sag (m)
+            input.form-control(type="text", name="conductor_sag", value="#{circuit.conductor_sag}")
+            label Conductor short term sag (m)
+            input.form-control(type="text", name="conductor_short_term_sag", value="#{circuit.conductor_short_term_sag}")
+            label Conductor long term sag (m)
+            input.form-control(type="text", name="conductor_long_term_sag", value="#{circuit.conductor_long_term_sag}")
+            button.btn.btn-primary(type="submit") Save

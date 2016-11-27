@@ -24,6 +24,26 @@ var TransmissionLine = bookshelf.Model.extend({
   },
   project: function() {
     return this.belongsTo(Project);
+  },
+  circuits: function() {
+    return this.hasMany(Circuit);
+  },
+  shieldWires: function() {
+    return this.hasMany(ShieldWire);
+  },
+});
+
+var Circuit = bookshelf.Model.extend({
+  tableName: 'circuit_type',
+  transmissionLine: function() {
+    return this.belongsTo(TransmissionLine);
+  }
+});
+
+var ShieldWire = bookshelf.Model.extend({
+  tableName: 'shield_wire_type',
+  transmissionLine: function() {
+    return this.belongsTo(TransmissionLine);
   }
 });
 
@@ -31,5 +51,7 @@ var TransmissionLine = bookshelf.Model.extend({
 module.exports = {
   User: User,
   Project: Project,
-  TransmissionLine: TransmissionLine
+  TransmissionLine: TransmissionLine,
+  Circuit: Circuit,
+  ShieldWire: ShieldWire,
 };

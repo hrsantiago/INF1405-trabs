@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 (#{shieldWire.x} ; #{shieldWire.y}) m
+        span &nbsp;
+        a.btn.btn-default(href="/transmissionline/" + shieldWire.transmission_line_id) Back
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/shieldwire/" + shieldWire.id + "/save", method="post")
+            label X (m)
+            input.form-control(type="text", name="x", value="#{shieldWire.x}")
+            label Y (m)
+            input.form-control(type="text", name="y", value="#{shieldWire.y}")
+            label Sag (m)
+            input.form-control(type="text", name="sag", value="#{shieldWire.sag}")
+            button.btn.btn-primary(type="submit") Save

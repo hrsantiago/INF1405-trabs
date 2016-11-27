@@ -36,10 +36,10 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  new models.TransmissionLine().where({id: req.params.id}).fetch({withRelated: ['owner'], require: true}).then(function(transmissionLine) {
+  new models.TransmissionLine().where({id: req.params.id}).fetch({withRelated: ['owner', 'circuits', 'shieldWires'], require: true}).then(function(transmissionLine) {
     if(transmissionLine.related('owner').id != req.user.id)
       return res.status(400).json('Not your transmission line');
-    res.render('transmissionline', { user: req.user, transmissionLine: transmissionLine.toJSON() });
+    res.render('transmissionline', { user: req.user, transmissionLine: transmissionLine.toJSON(), circuits: transmissionLine.related('circuits').toJSON(), shieldWires: transmissionLine.related('shieldWires').toJSON() });
   }).catch(function(err) { next(err); });
 });
 

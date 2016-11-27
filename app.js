@@ -19,7 +19,9 @@ require('./config/bookshelf');
 var index = require('./routes/index');
 var logout = require('./routes/logout');
 var project = require('./routes/project');
-var transmissionline = require('./routes/transmissionline');
+var transmissionLine = require('./routes/transmissionline');
+var circuit = require('./routes/circuit');
+var shieldWire = require('./routes/shieldwire');
 
 var app = express();
 
@@ -53,7 +55,9 @@ app.use(flash());
 app.use('/', index);
 app.use('/logout', logout);
 app.use('/project', project);
-app.use('/transmissionline', transmissionline);
+app.use('/transmissionline', transmissionLine);
+app.use('/circuit', circuit);
+app.use('/shieldwire', shieldWire);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

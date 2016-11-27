@@ -56,7 +56,7 @@ CREATE TABLE transmission_line (
   relative_air_density_90 REAL NOT NULL DEFAULT 1,
   max_circuits INTEGER NOT NULL DEFAULT 1,
   max_shield_wires INTEGER NOT NULL DEFAULT 0,
-  FOREIGN KEY(project_id) REFERENCES project(id)
+  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
 CREATE TABLE structure (
@@ -68,20 +68,20 @@ CREATE TABLE structure (
   utm_zone TEXT NOT NULL,
   soil_resistivity REAL NOT NULL,
   elevation REAL NOT NULL,
-  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id)
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
 );
 
 CREATE TABLE circuit_type (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
-  nominal_voltage REAL NOT NULL,
-  maximum_voltage REAL NOT NULL,
-  short_term_current_capacity REAL NOT NULL,
-  conductor_surface_factor REAL NOT NULL,
-  conductor_sag REAL NOT NULL,
-  conductor_short_term_sag REAL NOT NULL,
-  conductor_long_term_sag REAL NOT NULL,
-  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id)
+  nominal_voltage REAL NOT NULL DEFAULT 500,
+  maximum_voltage REAL NOT NULL DEFAULT 550,
+  short_term_current_capacity REAL NOT NULL DEFAULT 3895,
+  conductor_surface_factor REAL NOT NULL DEFAULT 0.85,
+  conductor_sag REAL NOT NULL DEFAULT 20,
+  conductor_short_term_sag REAL NOT NULL DEFAULT 22,
+  conductor_long_term_sag REAL NOT NULL DEFAULT 21,
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
 );
 
 CREATE TABLE shield_wire_type (
@@ -90,7 +90,7 @@ CREATE TABLE shield_wire_type (
   x REAL NOT NULL,
   y REAL NOT NULL,
   sag REAL NOT NULL,
-  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id)
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
 );
 
 CREATE TABLE phase (
@@ -99,7 +99,7 @@ CREATE TABLE phase (
   x REAL NOT NULL,
   y REAL NOT NULL,
   sag REAL NOT NULL,
-  FOREIGN KEY(circuit_id) REFERENCES circuit_type(id)
+  FOREIGN KEY(circuit_id) REFERENCES circuit_type(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cabling (
@@ -129,8 +129,8 @@ CREATE TABLE cable_type (
 CREATE TABLE cable (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   type_id INTEGER NOT NULL,
-  x REAL NOT NULL,
-  y REAL NOT NULL,
+  x REAL NOT NULL DEFAULT 0,
+  y REAL NOT NULL DEFAULT 0,
   FOREIGN KEY(type_id) REFERENCES cable_type(id)
 );
 
@@ -157,7 +157,7 @@ CREATE TABLE audible_noise (
   project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -166,7 +166,7 @@ CREATE TABLE electric_field (
   project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -175,7 +175,7 @@ CREATE TABLE magnetic_field (
   project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -184,7 +184,7 @@ CREATE TABLE radio_interference (
   project_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
   maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -231,6 +231,6 @@ INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto
 INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
   VALUES (2, 'LT 500 kV Açu III - João Câmara III', 60, 10, 0.9, 0.9, 1, 2);
 
-INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Teste', 2, 1);
+INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Teste (hrs)', 2, 1);
 INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
   VALUES (3, 'LT 500 kV SE I - SE II', 60, 10, 0.9, 0.9, 1, 2);
