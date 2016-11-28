@@ -120,6 +120,7 @@ CREATE TABLE cable_type (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   owner_id INTEGER NOT NULL,
   code TEXT NOT NULL,
+  type TEXT NOT NULL,
   size TEXT NOT NULL,
   stranding TEXT NOT NULL,
   diameter REAL NOT NULL,
@@ -234,3 +235,10 @@ INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, re
 INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Teste (hrs)', 2, 1);
 INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 
   VALUES (3, 'LT 500 kV SE I - SE II', 60, 10, 0.9, 0.9, 1, 2);
+
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'CAL 1120 - 993 kCM', 'CAL 1120', '993 kCM', '61', 29.25);
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'AÇO 1/2"', 'Galvanized steel HS', '1/2"', '7', 12.7);
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'AÇO 3/8"', 'Galvanized steel EHS', '3/8"', '7', 9.14);
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'DOTTEREL', 'ACSR', '176.9 kCM', '12/7', 15.42);
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'OPGW 12,4', 'OPGW', '85 mm²', '9/1', 12.4);
+INSERT INTO cable_type (owner_id, code, type, size, stranding, diameter) VALUES (1, 'OPGW 15,6', 'OPGW', '145 mm²', '10', 15.6);

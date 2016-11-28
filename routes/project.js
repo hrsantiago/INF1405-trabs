@@ -9,12 +9,6 @@ router.use(function(req, res, next) {
     next();
 });
 
-router.get('/', function(req, res, next) {
-  new models.Project().where({'owner_id' : req.user.id}).fetchAll().then(function(projects) {
-    res.render('projects', { user: req.user, projects: projects.toJSON() });
-  }).catch(function(err) { next(err); });
-});
-
 router.get('/add', function(req, res, next) {
   new models.Project({owner_id: req.user.id, name: 'New project'}).save().then(function(project) {
     res.redirect('/project/' + project.attributes.id);

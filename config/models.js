@@ -3,7 +3,10 @@ var bookshelf = require('./bookshelf');
 var User = bookshelf.Model.extend({
   tableName: 'user',
   projects: function() {
-    return this.hasMany(Project);
+    return this.hasMany(Project, 'owner_id');
+  },
+  cableTypes: function() {
+    return this.hasMany(CableType, 'owner_id');
   }
 });
 
@@ -57,6 +60,12 @@ var Structure = bookshelf.Model.extend({
   }
 });
 
+var CableType = bookshelf.Model.extend({
+  tableName: 'cable_type',
+  owner: function() {
+    return this.belongsTo(User);
+  }
+});
 
 module.exports = {
   User: User,
@@ -65,4 +74,5 @@ module.exports = {
   Circuit: Circuit,
   ShieldWire: ShieldWire,
   Structure: Structure,
+  CableType: CableType,
 };

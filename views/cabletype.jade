@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 #{cableType.code}
+        span &nbsp;
+        a.btn.btn-default(href="/user") Back
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/cabletype/" + cableType.id + "/save", method="post")
+            label Code
+            input.form-control(type="text", name="code", value="#{cableType.code}")
+            label Type
+            input.form-control(type="text", name="type", value="#{cableType.type}")
+            label Size
+            input.form-control(type="text", name="size", value="#{cableType.size}")
+            label Stranding
+            input.form-control(type="text", name="stranding", value="#{cableType.stranding}")
+            label Diameter (mm)
+            input.form-control(type="text", name="diameter", value="#{cableType.diameter}")
+            button.btn.btn-primary(type="submit") Save

@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 Welcome, #{user.name}!
+      div.panel.panel-default
+        div.panel-heading Projects
+        div.panel-body
+          table.table
+            tr
+              th #
+              th Project
+              th Created
+              th
+            - each project in projects
+              tr
+                td #{project.id}
+                td #{project.name}
+                td #{project.created}
+                td
+                  a.btn.btn-default(href="/project/#{project.id}") Edit
+                  span &nbsp; 
+                  a.btn.btn-danger(href="/project/remove/#{project.id}") Remove
+          a.btn.btn-default(href="/project/add") New project
+
+      div.panel.panel-default
+        div.panel-heading Cable Types
+        div.panel-body
+          table.table
+            tr
+              th #
+              th Name
+              th
+            - each cableType in cableTypes
+              tr
+                td #{cableType.id}
+                td #{cableType.code}
+                td
+                  a.btn.btn-default(href="/cabletype/#{cableType.id}") Edit
+                  span &nbsp;
+                  a.btn.btn-danger(href="/cabletype/remove/#{cableType.id}") Remove
+          a.btn.btn-default(href="/cabletype/add") New Cable Type
