@@ -22,6 +22,7 @@ var project = require('./routes/project');
 var transmissionLine = require('./routes/transmissionline');
 var circuit = require('./routes/circuit');
 var shieldWire = require('./routes/shieldwire');
+var structure = require('./routes/structure');
 
 var app = express();
 
@@ -58,6 +59,7 @@ app.use('/project', project);
 app.use('/transmissionline', transmissionLine);
 app.use('/circuit', circuit);
 app.use('/shieldwire', shieldWire);
+app.use('/structure', structure);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

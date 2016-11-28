@@ -63,11 +63,11 @@ CREATE TABLE structure (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
   name TEXT NOT NULL,
-  utm_x REAL NOT NULL,
-  utm_y REAL NOT NULL,
-  utm_zone TEXT NOT NULL,
-  soil_resistivity REAL NOT NULL,
-  elevation REAL NOT NULL,
+  utm_x REAL NOT NULL DEFAULT 0,
+  utm_y REAL NOT NULL DEFAULT 0,
+  utm_zone TEXT NOT NULL DEFAULT "",
+  soil_resistivity REAL NOT NULL DEFAULT 1000,
+  elevation REAL NOT NULL DEFAULT 0,
   FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
 );
 

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 #{structure.name}
+        span &nbsp;
+        a.btn.btn-default(href="/transmissionline/" + structure.transmission_line_id) Back
+
+      div.panel.panel-default
+        div.panel-heading General
+        div.panel-body
+          form(action="/structure/" + structure.id + "/save", method="post")
+            label Name
+            input.form-control(type="text", name="name", value="#{structure.name}")
+            label X (m)
+            input.form-control(type="text", name="utm_x", value="#{structure.utm_x}")
+            label Y (m)
+            input.form-control(type="text", name="utm_y", value="#{structure.utm_y}")
+            label UTM Zone
+            input.form-control(type="text", name="utm_zone", value="#{structure.utm_zone}")
+            label Soil resistivity (&Omega;.m)
+            input.form-control(type="text", name="soil_resistivity", value="#{structure.soil_resistivity}")
+            label Elevation (m)
+            input.form-control(type="text", name="elevation", value="#{structure.elevation}")
+            button.btn.btn-primary(type="submit") Save

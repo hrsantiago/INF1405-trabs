@@ -31,6 +31,9 @@ var TransmissionLine = bookshelf.Model.extend({
   shieldWires: function() {
     return this.hasMany(ShieldWire);
   },
+  structures: function() {
+    return this.hasMany(Structure);
+  },
 });
 
 var Circuit = bookshelf.Model.extend({
@@ -47,6 +50,13 @@ var ShieldWire = bookshelf.Model.extend({
   }
 });
 
+var Structure = bookshelf.Model.extend({
+  tableName: 'structure',
+  transmissionLine: function() {
+    return this.belongsTo(TransmissionLine);
+  }
+});
+
 
 module.exports = {
   User: User,
@@ -54,4 +64,5 @@ module.exports = {
   TransmissionLine: TransmissionLine,
   Circuit: Circuit,
   ShieldWire: ShieldWire,
+  Structure: Structure,
 };

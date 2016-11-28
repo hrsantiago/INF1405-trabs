@@ -63,3 +63,21 @@ block content
                   span &nbsp;
                   a.btn.btn-danger(href="/shieldwire/remove/#{shieldWire.id}") Remove
           a.btn.btn-default(href="/shieldwire/add/" + transmissionLine.id) New Shield Wire
+
+      div.panel.panel-default
+        div.panel-heading Structures
+        div.panel-body
+          table.table
+            tr
+              th #
+              th Name
+              th
+            - each structure in structures
+              tr
+                td #{structure.id}
+                td #{structure.name}
+                td
+                  a.btn.btn-default(href="/structure/#{structure.id}") Edit
+                  span &nbsp;
+                  a.btn.btn-danger(href="/structure/remove/#{structure.id}") Remove
+          a.btn.btn-default(href="/structure/add/" + transmissionLine.id) New Structure
