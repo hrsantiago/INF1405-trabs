@@ -6,7 +6,7 @@ block content
     .container
       h3 #{project.name}
         span &nbsp;
-        a.btn.btn-default(href="/project") Back
+        a.btn.btn-default(href="/user") Back
 
       div.panel.panel-default
         div.panel-heading General
@@ -28,16 +28,19 @@ block content
         div.panel-heading Transmission Lines
         div.panel-body
           table.table
-            tr
-              th #
-              th Name
-              th
-            - each transmissionLine in transmissionLines
+            thead
               tr
-                td #{transmissionLine.id}
-                td #{transmissionLine.name}
-                td
-                  a.btn.btn-default(href="/transmissionline/#{transmissionLine.id}") Edit
-                  span &nbsp;
-                  a.btn.btn-danger(href="/transmissionline/remove/#{transmissionLine.id}") Remove
+                th #
+                th Name
+                th &nbsp;
+            tbody
+              - each transmissionLine in transmissionLines
+                tr
+                  td #{transmissionLine.id}
+                  td #{transmissionLine.name}
+                  td
+                    a.btn.btn-default(href="/transmissionline/#{transmissionLine.id}") Edit
+                    span &nbsp;
+                    a.btn.btn-danger(href="/transmissionline/remove/#{transmissionLine.id}") Remove
+        div.panel-footer
           a.btn.btn-default(href="/transmissionline/add/" + project.id) New Transmission Line

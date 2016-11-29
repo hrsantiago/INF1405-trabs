@@ -13,7 +13,7 @@ block content
         div.panel-body
           form(action="/transmissionline/" + transmissionLine.id + "/save", method="post")
             label Name
-            input.form-control(type="text", name="name", placeholder="Name", value="#{transmissionLine.name}")
+            input.form-control(type="text", name="name", value="#{transmissionLine.name}")
             label Frequency (Hz)
             input.form-control(type="text", name="frequency", value="#{transmissionLine.frequency}")
             label Average rainfall (mm/h)
@@ -32,52 +32,85 @@ block content
         div.panel-heading Circuits
         div.panel-body
           table.table
-            tr
-              th #
-              th Voltage
-              th
-            - each circuit in circuits
+            thead
               tr
-                td #{circuit.id}
-                td #{circuit.nominal_voltage} kV
-                td
-                  a.btn.btn-default(href="/circuit/#{circuit.id}") Edit
-                  span &nbsp;
-                  a.btn.btn-danger(href="/circuit/remove/#{circuit.id}") Remove
+                th #
+                th Voltage
+                th &nbsp;
+            tbody
+              - each circuit in circuits
+                tr
+                  td #{circuit.id}
+                  td #{circuit.nominal_voltage} kV
+                  td
+                    a.btn.btn-default(href="/circuit/#{circuit.id}") Edit
+                    span &nbsp;
+                    a.btn.btn-danger(href="/circuit/remove/#{circuit.id}") Remove
+        div.panel-footer
           a.btn.btn-default(href="/circuit/add/" + transmissionLine.id) New Circuit
 
       div.panel.panel-default
         div.panel-heading Shield Wires
         div.panel-body
           table.table
-            tr
-              th #
-              th Name
-              th
-            - each shieldWire in shieldWires
+            thead
               tr
-                td #{shieldWire.id}
-                td (#{shieldWire.x} ; #{shieldWire.y}) m
-                td
-                  a.btn.btn-default(href="/shieldwire/#{shieldWire.id}") Edit
-                  span &nbsp;
-                  a.btn.btn-danger(href="/shieldwire/remove/#{shieldWire.id}") Remove
+                th #
+                th Name
+                th &nbsp;
+            tbody
+              - each shieldWire in shieldWires
+                tr
+                  td #{shieldWire.id}
+                  td (#{shieldWire.x} ; #{shieldWire.y}) m
+                  td
+                    a.btn.btn-default(href="/shieldwire/#{shieldWire.id}") Edit
+                    span &nbsp;
+                    a.btn.btn-danger(href="/shieldwire/remove/#{shieldWire.id}") Remove
+        div.panel-footer
           a.btn.btn-default(href="/shieldwire/add/" + transmissionLine.id) New Shield Wire
 
       div.panel.panel-default
         div.panel-heading Structures
-        div.panel-body
+        div.panel-body(style="overflow-y: auto; max-height: 300px;")
           table.table
-            tr
-              th #
-              th Name
-              th
-            - each structure in structures
+            thead
               tr
-                td #{structure.id}
-                td #{structure.name}
-                td
-                  a.btn.btn-default(href="/structure/#{structure.id}") Edit
-                  span &nbsp;
-                  a.btn.btn-danger(href="/structure/remove/#{structure.id}") Remove
+                th #
+                th Name
+                th &nbsp;
+            tbody
+              - each structure in structures
+                tr
+                  td #{structure.id}
+                  td #{structure.name}
+                  td
+                    a.btn.btn-default(href="/structure/#{structure.id}") Edit
+                    span &nbsp;
+                    a.btn.btn-danger(href="/structure/remove/#{structure.id}") Remove
+        div.panel-footer
           a.btn.btn-default(href="/structure/add/" + transmissionLine.id) New Structure
+          span &nbsp;
+          a.btn.btn-default(data-toggle="modal" data-target="#myModal") New Structures
+          span &nbsp;
+          a.btn.btn-danger(href="/structure/removeall/#{transmissionLine.id}") Remove All
+
+          div#myModal.modal.fade(role="dialog" tabindex="-1")
+            div.modal-dialog
+              form(action="/structure/addmany/" + transmissionLine.id, method="post")
+                div.modal-content
+                  div.modal-header
+                    h3 New structures
+                  div.modal-body
+                      label Length (km)
+                      input.form-control(type="text", name="length", value="100")
+                      label Average span (m)
+                      input.form-control(type="text", name="average_span", value="500")
+                      label Initial span (m)
+                      input.form-control(type="text", name="initial_span", value="100")
+                      label Angle (°)
+                      input.form-control(type="text", name="angle", value="0")
+                  div.modal-footer
+                    button.btn.btn-primary(type="submit") Add
+                    a.btn.btn-default(data-dismiss="modal") Close
+
