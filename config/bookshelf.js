@@ -1,12 +1,8 @@
+var mysqlConfig = require('./mysql');
+
 var knex = require('knex')({
   client: 'mysql',
-  connection: {
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'transmissionlines',
-    charset  : 'utf8'
-  }
+  connection: mysqlConfig
 });
 
 var bookshelf = require('bookshelf')(knex);

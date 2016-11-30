@@ -43,6 +43,16 @@ var Circuit = bookshelf.Model.extend({
   tableName: 'circuit_type',
   transmissionLine: function() {
     return this.belongsTo(TransmissionLine);
+  },
+  phases: function() {
+    return this.hasMany(Phase);
+  },
+});
+
+var Phase = bookshelf.Model.extend({
+  tableName: 'phase',
+  circuit: function() {
+    return this.belongsTo(Circuit);
   }
 });
 
@@ -72,6 +82,7 @@ module.exports = {
   Project: Project,
   TransmissionLine: TransmissionLine,
   Circuit: Circuit,
+  Phase: Phase,
   ShieldWire: ShieldWire,
   Structure: Structure,
   CableType: CableType,

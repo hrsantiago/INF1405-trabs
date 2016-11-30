@@ -6,9 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mysql = require('mysql');
-var connection  = require('express-myconnection');
+var mysqlConfig = require('./config/mysql');
 
 var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
@@ -28,16 +29,6 @@ var cableType = require('./routes/cabletype');
 
 var app = express();
 
-app.use(
-  connection(mysql,{
-    host: 'localhost',
-    user: 'root',
-    password : '',
-    port : 3306, //port mysql
-    database:'transmissionlines'
-  },'request')
-);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -50,7 +41,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: '123transmissionlines34' }));
+app.use(session({
+  key: 'session_cookie_transmissionlines',
+  secret: '123transmissionlines34',
+  store: new MySQLStore(mysqlConfig),
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

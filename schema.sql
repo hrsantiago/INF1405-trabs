@@ -95,12 +95,22 @@ CREATE TABLE shield_wire_type (
 
 CREATE TABLE phase (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  circuit_id INTEGER NOT NULL,
+  circuit_type_id INTEGER NOT NULL,
   x REAL NOT NULL,
   y REAL NOT NULL,
-  sag REAL NOT NULL,
-  FOREIGN KEY(circuit_id) REFERENCES circuit_type(id) ON DELETE CASCADE
+  type INTEGER NOT NULL,
+  FOREIGN KEY(circuit_type_id) REFERENCES circuit_type(id) ON DELETE CASCADE
 );
+
+delimiter |
+CREATE TRIGGER circuit_type_phases AFTER INSERT ON circuit_type
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 1);
+    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 2);
+    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 3);
+  END;
+|
 
 CREATE TABLE cabling (
   first_struture_id INTEGER NOT NULL,
@@ -124,7 +134,7 @@ CREATE TABLE cable_type (
   size TEXT NOT NULL,
   stranding TEXT NOT NULL,
   diameter REAL NOT NULL,
-  FOREIGN KEY(owner_id) REFERENCES user(id)
+  FOREIGN KEY(owner_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cable (
@@ -236,6 +246,8 @@ INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, re
 
 INSERT INTO circuit_type (transmission_line_id, nominal_voltage, maximum_voltage, short_term_current_capacity, conductor_surface_factor, conductor_sag, conductor_short_term_sag, conductor_long_term_sag)
   VALUES(1, 500, 550, 3895, 0.85, 20.24, 21.20, 20.83);
+
+
 
 INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, -14.90, 40.40, 16.19);
 INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, -14.90, 40.40, 16.19);

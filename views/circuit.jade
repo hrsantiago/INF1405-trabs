@@ -27,3 +27,8 @@ block content
             label Conductor long term sag (m)
             input.form-control(type="text", name="conductor_long_term_sag", value="#{circuit.conductor_long_term_sag}")
             button.btn.btn-primary(type="submit") Save
+
+      - each phases in phases
+        div.panel.panel-default
+          div.panel-heading Phase 1
+          div.panel-body

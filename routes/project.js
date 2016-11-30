@@ -17,7 +17,7 @@ router.get('/add', function(req, res, next) {
 
 router.get('/remove/:id', function(req, res, next) {
   new models.Project().where({id: req.params.id, owner_id: req.user.id}).destroy().then(function(project) {
-    res.redirect('/project');
+    res.redirect('/user');
   }).catch(function(err) { next(err); });
 });
 
