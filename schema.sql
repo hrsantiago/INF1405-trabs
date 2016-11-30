@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS bundle;
 DROP TABLE IF EXISTS cable;
 DROP TABLE IF EXISTS cable_type;
 DROP TABLE IF EXISTS audible_noise;
@@ -13,6 +12,7 @@ DROP TABLE IF EXISTS cabling;
 DROP TABLE IF EXISTS phase;
 DROP TABLE IF EXISTS shield_wire_type;
 DROP TABLE IF EXISTS circuit_type;
+DROP TABLE IF EXISTS bundle;
 DROP TABLE IF EXISTS structure;
 DROP TABLE IF EXISTS transmission_line;
 DROP TABLE IF EXISTS project;
@@ -71,6 +71,12 @@ CREATE TABLE structure (
   FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
 );
 
+CREATE TABLE bundle (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  x REAL NOT NULL DEFAULT 0,
+  y REAL NOT NULL DEFAULT 0
+);
+
 CREATE TABLE circuit_type (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
@@ -87,30 +93,20 @@ CREATE TABLE circuit_type (
 CREATE TABLE shield_wire_type (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   transmission_line_id INTEGER NOT NULL,
-  x REAL NOT NULL,
-  y REAL NOT NULL,
+  bundle_id INTEGER,
   sag REAL NOT NULL,
-  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE,
+  FOREIGN KEY(bundle_id) REFERENCES bundle(id)
 );
 
 CREATE TABLE phase (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   circuit_type_id INTEGER NOT NULL,
-  x REAL NOT NULL,
-  y REAL NOT NULL,
+  bundle_id INTEGER,
   type INTEGER NOT NULL,
-  FOREIGN KEY(circuit_type_id) REFERENCES circuit_type(id) ON DELETE CASCADE
+  FOREIGN KEY(circuit_type_id) REFERENCES circuit_type(id) ON DELETE CASCADE,
+  FOREIGN KEY(bundle_id) REFERENCES bundle(id)
 );
-
-delimiter |
-CREATE TRIGGER circuit_type_phases AFTER INSERT ON circuit_type
-  FOR EACH ROW
-  BEGIN
-    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 1);
-    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 2);
-    INSERT INTO phase (circuit_type_id, x, y, type) VALUES (NEW.id, 0, 0, 3);
-  END;
-|
 
 CREATE TABLE cabling (
   first_struture_id INTEGER NOT NULL,
@@ -139,20 +135,12 @@ CREATE TABLE cable_type (
 
 CREATE TABLE cable (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  bundle_id INTEGER NOT NULL,
   cable_type_id INTEGER NOT NULL,
   x REAL NOT NULL DEFAULT 0,
   y REAL NOT NULL DEFAULT 0,
+  FOREIGN KEY(bundle_id) REFERENCES bundle(id) ON DELETE CASCADE,
   FOREIGN KEY(cable_type_id) REFERENCES cable_type(id)
-);
-
-CREATE TABLE bundle (
-  cable_id INTEGER NOT NULL,
-  phase_id INTEGER ,
-  shield_wire_id INTEGER,
-  PRIMARY KEY(cable_id, phase_id, shield_wire_id),
-  FOREIGN KEY(cable_id) REFERENCES cable(id),
-  FOREIGN KEY(phase_id) REFERENCES phase(id),
-  FOREIGN KEY(shield_wire_id) REFERENCES shield_wire_type(id)
 );
 
 CREATE TABLE profile (
@@ -227,6 +215,46 @@ CREATE TABLE document_template (
   FOREIGN KEY(file_id) REFERENCES file(id)
 );
 
+-- Triggers
+
+delimiter |
+CREATE TRIGGER circuit_type_phases AFTER INSERT ON circuit_type
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO phase (circuit_type_id, type) VALUES (NEW.id, 1);
+    INSERT INTO phase (circuit_type_id, type) VALUES (NEW.id, 2);
+    INSERT INTO phase (circuit_type_id, type) VALUES (NEW.id, 3);
+  END;
+|
+
+delimiter |
+CREATE TRIGGER phases_bundle BEFORE INSERT ON phase
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO bundle (x, y) VALUES (0, 0);
+    SET @lastBundleId = LAST_INSERT_ID();
+    SET NEW.bundle_id = @lastBundleId;
+  END;
+|
+
+delimiter |
+CREATE TRIGGER shield_wire_type_bundle BEFORE INSERT ON shield_wire_type
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO bundle (x, y) VALUES (0, 0);
+    SET @lastBundleId = LAST_INSERT_ID();
+    SET NEW.bundle_id = @lastBundleId;
+  END;
+|
+
+delimiter |
+CREATE TRIGGER bundle_cable AFTER INSERT ON bundle
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO cable (bundle_id, cable_type_id, x, y) VALUES (NEW.id, 1, 0, 0);
+  END;
+|
+
 -- Default values
 INSERT INTO company (name) VALUES ('Fluxo Engenharia');
 INSERT INTO company (name) VALUES ('Cymi');
@@ -247,13 +275,17 @@ INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, re
 INSERT INTO circuit_type (transmission_line_id, nominal_voltage, maximum_voltage, short_term_current_capacity, conductor_surface_factor, conductor_sag, conductor_short_term_sag, conductor_long_term_sag)
   VALUES(1, 500, 550, 3895, 0.85, 20.24, 21.20, 20.83);
 
+UPDATE bundle SET x = -7, y = 32.43 WHERE id = 1;
+UPDATE bundle SET x = 0, y = 31.13 WHERE id = 2;
+UPDATE bundle SET x = 7, y = 32.43 WHERE id = 3;
 
+INSERT INTO shield_wire_type (transmission_line_id, sag) VALUES(1, 16.19);
+UPDATE bundle SET x = -14.9, y = 40.40 WHERE id = 4;
+INSERT INTO shield_wire_type (transmission_line_id, sag) VALUES(1, 16.19);
+UPDATE bundle SET x = 14.9, y = 40.40 WHERE id = 5;
 
-INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, -14.90, 40.40, 16.19);
-INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, -14.90, 40.40, 16.19);
-INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, 14.90, 40.40, 16.19);
-INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, 14.90, 40.40, 16.19);
-INSERT INTO shield_wire_type (transmission_line_id, x, y, sag) VALUES(1, 0, -0.5, 0);
+INSERT INTO structure (transmission_line_id, name, utm_x, utm_y) VALUES (1, 'PORT_AÇU', 0, 0);
+INSERT INTO structure (transmission_line_id, name, utm_x, utm_y) VALUES (1, 'PORT_JCA', 1000, 0);
 
 INSERT INTO project (owner_id, name, client_id, designer_id) VALUES (1, 'Projeto Básico Teste (hrs)', 2, 1);
 INSERT INTO transmission_line (project_id, name, frequency, average_rainfall, relative_air_density_50, relative_air_density_90, max_circuits, max_shield_wires) 

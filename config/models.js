@@ -53,20 +53,43 @@ var Phase = bookshelf.Model.extend({
   tableName: 'phase',
   circuit: function() {
     return this.belongsTo(Circuit);
-  }
+  },
+  bundle: function() {
+    return this.belongsTo(Bundle);
+  },
 });
 
 var ShieldWire = bookshelf.Model.extend({
   tableName: 'shield_wire_type',
   transmissionLine: function() {
     return this.belongsTo(TransmissionLine);
-  }
+  },
+  bundle: function() {
+    return this.belongsTo(Bundle);
+  },
+});
+
+var Bundle = bookshelf.Model.extend({
+  tableName: 'bundle',
+  cables: function() {
+    return this.hasMany(Cable);
+  },
 });
 
 var Structure = bookshelf.Model.extend({
   tableName: 'structure',
   transmissionLine: function() {
     return this.belongsTo(TransmissionLine);
+  }
+});
+
+var Cable = bookshelf.Model.extend({
+  tableName: 'cable',
+  bundle: function() {
+    return this.belongsTo(Bundle);
+  },
+  cableType: function() {
+    return this.hasOne(CableType);
   }
 });
 
@@ -84,6 +107,8 @@ module.exports = {
   Circuit: Circuit,
   Phase: Phase,
   ShieldWire: ShieldWire,
+  Bundle: Bundle,
   Structure: Structure,
+  Cable: Cable,
   CableType: CableType,
 };

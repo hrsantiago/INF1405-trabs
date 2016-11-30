@@ -38,7 +38,7 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  new models.ShieldWire().where({id: req.params.id}).fetch({withRelated: ['transmissionLine.owner'], require: true}).then(function(shieldWire) {
+  new models.ShieldWire().where({id: req.params.id}).fetch({withRelated: ['transmissionLine.owner', 'bundle'], require: true}).then(function(shieldWire) {
     if(shieldWire.related('transmissionLine').related('owner').id != req.user.id)
       return res.status(400).json('Not your shield wire');
     res.render('shieldwire', { user: req.user, shieldWire: shieldWire.toJSON() });
@@ -46,17 +46,23 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/:id/save', function(req, res, next) {
-  var body = {
+  var shieldWireBody = {
+    sag: req.body.sag,
+  };
+
+  var bundleBody = {
     x: req.body.x,
     y: req.body.y,
-    sag: req.body.sag,
   };
 
   new models.ShieldWire().where({id: req.params.id}).fetch({withRelated: ['transmissionLine.owner'], require: true})
     .then(function(shieldWire) {
       if(shieldWire.related('transmissionLine').related('owner').id != req.user.id)
         return res.status(400).json('Not your shield wire');
-      return shieldWire.save(body, {patch: true});
+      return shieldWire.save(shieldWireBody, {patch: true});
+    })
+    .then(function(shieldWire) {
+      return new models.Bundle().where({id: shieldWire.attributes.bundle_id}).save(bundleBody, {patch: true});
     })
     .then(function(shieldWire) {
       res.redirect("/shieldwire/" + req.params.id);

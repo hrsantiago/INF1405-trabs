@@ -63,7 +63,7 @@ block content
               - each shieldWire in transmissionLine.shieldWires
                 tr
                   td #{shieldWire.id}
-                  td (#{shieldWire.x} ; #{shieldWire.y}) m
+                  td (#{shieldWire.bundle.x} ; #{shieldWire.bundle.y}) m
                   td
                     a.btn.btn-default(href="/shieldwire/#{shieldWire.id}") Edit
                     span &nbsp;

@@ -32,13 +32,18 @@ block content
       - each phase in circuit.phases
         div.panel.panel-default
           div.panel-heading Phase #{phase.type}
-          div.panel-body
-            label X (m)
-            input.form-control(type="text", name="x", value="#{phase.x}")
-            label Y (m)
-            input.form-control(type="text", name="y", value="#{phase.y}")
-            label Type
-            select.form-control(name="")
-              option(value="1", selected=phase.type==1) A
-              option(value="2", selected=phase.type==2) B
-              option(value="3", selected=phase.type==3) C
+          form(action="/phase/" + phase.id + "/save", method="post")
+            div.panel-body
+              label X (m)
+              input.form-control(type="text", name="x", value="#{phase.bundle.x}")
+              label Y (m)
+              input.form-control(type="text", name="y", value="#{phase.bundle.y}")
+              label Type
+              select.form-control(name="type")
+                option(value="1", selected=phase.type==1) A
+                option(value="2", selected=phase.type==2) B
+                option(value="3", selected=phase.type==3) C
+            div.panel-footer
+              button.btn.btn-primary(type="submit") Save
+              span &nbsp;
+              a.btn.btn-default(href="/bundle/phase/" + phase.id) Edit Bundle

@@ -38,7 +38,7 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  new models.Circuit().where({id: req.params.id}).fetch({withRelated: ['transmissionLine.owner', 'phases'], require: true}).then(function(circuit) {
+  new models.Circuit().where({id: req.params.id}).fetch({withRelated: ['transmissionLine.owner', 'phases.bundle'], require: true}).then(function(circuit) {
     if(circuit.related('transmissionLine').related('owner').id != req.user.id)
       return res.status(400).json('Not your circuit');
     res.render('circuit', { user: req.user, circuit: circuit.toJSON() });

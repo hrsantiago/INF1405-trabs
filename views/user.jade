@@ -13,14 +13,12 @@ block content
               tr
                 th #
                 th Project
-                th Created
                 th &nbsp;
             tbody
               - each project in projects
                 tr
                   td #{project.id}
                   td #{project.name}
-                  td #{project.created}
                   td
                     a.btn.btn-default(href="/project/#{project.id}") Edit
                     span &nbsp; 
