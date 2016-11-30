@@ -10,8 +10,8 @@ block content
 
       div.panel.panel-default
         div.panel-heading General
-        div.panel-body
-          form(action="/transmissionline/" + transmissionLine.id + "/save", method="post")
+        form(action="/transmissionline/" + transmissionLine.id + "/save", method="post")
+          div.panel-body
             label Name
             input.form-control(type="text", name="name", value="#{transmissionLine.name}")
             label Frequency (Hz)
@@ -26,6 +26,7 @@ block content
             input.form-control(type="text", name="max_circuits", value="#{transmissionLine.max_circuits}")
             label Max shield wires
             input.form-control(type="text", name="max_shield_wires", value="#{transmissionLine.max_shield_wires}")
+          div.panel-footer
             button.btn.btn-primary(type="submit") Save
 
       div.panel.panel-default
@@ -38,7 +39,7 @@ block content
                 th Voltage
                 th &nbsp;
             tbody
-              - each circuit in circuits
+              - each circuit in transmissionLine.circuits
                 tr
                   td #{circuit.id}
                   td #{circuit.nominal_voltage} kV
@@ -59,7 +60,7 @@ block content
                 th Name
                 th &nbsp;
             tbody
-              - each shieldWire in shieldWires
+              - each shieldWire in transmissionLine.shieldWires
                 tr
                   td #{shieldWire.id}
                   td (#{shieldWire.x} ; #{shieldWire.y}) m
@@ -80,7 +81,7 @@ block content
                 th Name
                 th &nbsp;
             tbody
-              - each structure in structures
+              - each structure in transmissionLine.structures
                 tr
                   td #{structure.id}
                   td #{structure.name}

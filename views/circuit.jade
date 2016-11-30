@@ -10,8 +10,8 @@ block content
 
       div.panel.panel-default
         div.panel-heading General
-        div.panel-body
-          form(action="/circuit/" + circuit.id + "/save", method="post")
+        form(action="/circuit/" + circuit.id + "/save", method="post")
+          div.panel-body
             label Nominal voltage (kV)
             input.form-control(type="text", name="nominal_voltage", value="#{circuit.nominal_voltage}")
             label Maximum voltage (kV)
@@ -26,9 +26,19 @@ block content
             input.form-control(type="text", name="conductor_short_term_sag", value="#{circuit.conductor_short_term_sag}")
             label Conductor long term sag (m)
             input.form-control(type="text", name="conductor_long_term_sag", value="#{circuit.conductor_long_term_sag}")
+          div.panel-footer
             button.btn.btn-primary(type="submit") Save
 
-      - each phases in phases
+      - each phase in circuit.phases
         div.panel.panel-default
-          div.panel-heading Phase 1
+          div.panel-heading Phase #{phase.type}
           div.panel-body
+            label X (m)
+            input.form-control(type="text", name="x", value="#{phase.x}")
+            label Y (m)
+            input.form-control(type="text", name="y", value="#{phase.y}")
+            label Type
+            select.form-control(name="")
+              option(value="1", selected=phase.type==1) A
+              option(value="2", selected=phase.type==2) B
+              option(value="3", selected=phase.type==3) C

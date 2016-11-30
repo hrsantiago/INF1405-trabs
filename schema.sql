@@ -139,10 +139,10 @@ CREATE TABLE cable_type (
 
 CREATE TABLE cable (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  type_id INTEGER NOT NULL,
+  cable_type_id INTEGER NOT NULL,
   x REAL NOT NULL DEFAULT 0,
   y REAL NOT NULL DEFAULT 0,
-  FOREIGN KEY(type_id) REFERENCES cable_type(id)
+  FOREIGN KEY(cable_type_id) REFERENCES cable_type(id)
 );
 
 CREATE TABLE bundle (

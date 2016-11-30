@@ -10,8 +10,8 @@ block content
 
       div.panel.panel-default
         div.panel-heading General
-        div.panel-body
-          form(action="/cabletype/" + cableType.id + "/save", method="post")
+        form(action="/cabletype/" + cableType.id + "/save", method="post")
+          div.panel-body
             label Code
             input.form-control(type="text", name="code", value="#{cableType.code}")
             label Type
@@ -22,4 +22,5 @@ block content
             input.form-control(type="text", name="stranding", value="#{cableType.stranding}")
             label Diameter (mm)
             input.form-control(type="text", name="diameter", value="#{cableType.diameter}")
+          div.panel-footer
             button.btn.btn-primary(type="submit") Save

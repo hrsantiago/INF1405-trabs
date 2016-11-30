@@ -10,8 +10,8 @@ block content
 
       div.panel.panel-default
         div.panel-heading General
-        div.panel-body
-          form(action="/structure/" + structure.id + "/save", method="post")
+        form(action="/structure/" + structure.id + "/save", method="post")
+          div.panel-body
             label Name
             input.form-control(type="text", name="name", value="#{structure.name}")
             label X (m)
@@ -24,4 +24,5 @@ block content
             input.form-control(type="text", name="soil_resistivity", value="#{structure.soil_resistivity}")
             label Elevation (m)
             input.form-control(type="text", name="elevation", value="#{structure.elevation}")
+          div.panel-footer
             button.btn.btn-primary(type="submit") Save
