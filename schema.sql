@@ -145,45 +145,45 @@ CREATE TABLE cable (
 
 CREATE TABLE profile (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  initial_x REAL NOT NULL,
-  final_x REAL NOT NULL,
-  increment_x REAL NOT NULL,
-  height REAL NOT NULL
+  initial_x REAL NOT NULL DEFAULT -35,
+  final_x REAL NOT NULL DEFAULT 35,
+  increment_x REAL NOT NULL DEFAULT 1,
+  height REAL NOT NULL DEFAULT 1.5
 );
 
 CREATE TABLE audible_noise (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_id INTEGER NOT NULL,
+  transmission_line_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
-  maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
+  maximum_level_at_border REAL DEFAULT 58,
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE electric_field (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_id INTEGER NOT NULL,
+  transmission_line_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
-  maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
+  maximum_level_at_border REAL DEFAULT 4.17,
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE magnetic_field (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_id INTEGER NOT NULL,
+  transmission_line_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
-  maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
+  maximum_level_at_border REAL DEFAULT 200,
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
 CREATE TABLE radio_interference (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  project_id INTEGER NOT NULL,
+  transmission_line_id INTEGER NOT NULL,
   profile_id INTEGER NOT NULL,
-  maximum_level_at_border REAL NOT NULL,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE,
+  maximum_level_at_border REAL DEFAULT 42,
+  FOREIGN KEY(transmission_line_id) REFERENCES transmission_line(id) ON DELETE CASCADE,
   FOREIGN KEY(profile_id) REFERENCES profile(id)
 );
 
@@ -218,6 +218,17 @@ CREATE TABLE document_template (
 -- Triggers
 
 delimiter |
+CREATE TRIGGER transmission_line_applications AFTER INSERT ON transmission_line
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO audible_noise (transmission_line_id) VALUES (NEW.id);
+    INSERT INTO electric_field (transmission_line_id) VALUES (NEW.id);
+    INSERT INTO magnetic_field (transmission_line_id) VALUES (NEW.id);
+    INSERT INTO radio_interference (transmission_line_id) VALUES (NEW.id);
+  END;
+|
+
+delimiter |
 CREATE TRIGGER circuit_type_phases AFTER INSERT ON circuit_type
   FOR EACH ROW
   BEGIN
@@ -232,8 +243,7 @@ CREATE TRIGGER phases_bundle BEFORE INSERT ON phase
   FOR EACH ROW
   BEGIN
     INSERT INTO bundle (x, y) VALUES (0, 0);
-    SET @lastBundleId = LAST_INSERT_ID();
-    SET NEW.bundle_id = @lastBundleId;
+    SET NEW.bundle_id = LAST_INSERT_ID();
   END;
 |
 
@@ -242,8 +252,7 @@ CREATE TRIGGER shield_wire_type_bundle BEFORE INSERT ON shield_wire_type
   FOR EACH ROW
   BEGIN
     INSERT INTO bundle (x, y) VALUES (0, 0);
-    SET @lastBundleId = LAST_INSERT_ID();
-    SET NEW.bundle_id = @lastBundleId;
+    SET NEW.bundle_id = LAST_INSERT_ID();
   END;
 |
 
@@ -252,6 +261,42 @@ CREATE TRIGGER bundle_cable AFTER INSERT ON bundle
   FOR EACH ROW
   BEGIN
     INSERT INTO cable (bundle_id, cable_type_id, x, y) VALUES (NEW.id, 1, 0, 0);
+  END;
+|
+
+delimiter |
+CREATE TRIGGER audible_noise_profile BEFORE INSERT ON audible_noise
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO profile VALUES ();
+    SET NEW.profile_id = LAST_INSERT_ID();
+  END;
+|
+
+delimiter |
+CREATE TRIGGER electric_field_profile BEFORE INSERT ON electric_field
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO profile VALUES ();
+    SET NEW.profile_id = LAST_INSERT_ID();
+  END;
+|
+
+delimiter |
+CREATE TRIGGER magnetic_field_profile BEFORE INSERT ON magnetic_field
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO profile VALUES ();
+    SET NEW.profile_id = LAST_INSERT_ID();
+  END;
+|
+
+delimiter |
+CREATE TRIGGER radio_interference_profile BEFORE INSERT ON radio_interference
+  FOR EACH ROW
+  BEGIN
+    INSERT INTO profile VALUES ();
+    SET NEW.profile_id = LAST_INSERT_ID();
   END;
 |
 

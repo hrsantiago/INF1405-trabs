@@ -37,6 +37,9 @@ var TransmissionLine = bookshelf.Model.extend({
   structures: function() {
     return this.hasMany(Structure);
   },
+  audibleNoise: function() {
+    return this.hasOne(AudibleNoise);
+  }
 });
 
 var Circuit = bookshelf.Model.extend({
@@ -100,6 +103,20 @@ var CableType = bookshelf.Model.extend({
   }
 });
 
+var AudibleNoise = bookshelf.Model.extend({
+  tableName: 'audible_noise',
+  transmissionLine: function() {
+    return this.belongsTo(TransmissionLine);
+  },
+  profile: function() {
+    return this.belongsTo(Profile);
+  }
+});
+
+var Profile = bookshelf.Model.extend({
+  tableName: 'profile',
+});
+
 module.exports = {
   User: User,
   Project: Project,
@@ -111,4 +128,6 @@ module.exports = {
   Structure: Structure,
   Cable: Cable,
   CableType: CableType,
+  AudibleNoise: AudibleNoise,
+  Profile: Profile,
 };

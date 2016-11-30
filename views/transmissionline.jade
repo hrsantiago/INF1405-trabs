@@ -115,3 +115,21 @@ block content
                     button.btn.btn-primary(type="submit") Add
                     a.btn.btn-default(data-dismiss="modal") Close
 
+      div.panel.panel-default
+        div.panel-heading Audible Noise
+        form(action="/audiblenoise/" + transmissionLine.id + "/save", method="post")
+          div.panel-body
+            label Profile initial X (m)
+            input.form-control(type="text", name="initial_x", value="#{transmissionLine.audibleNoise.profile.initial_x}")
+            label Profile final X (m)
+            input.form-control(type="text", name="final_x", value="#{transmissionLine.audibleNoise.profile.final_x}")
+            label Profile increment X (m)
+            input.form-control(type="text", name="increment_x", value="#{transmissionLine.audibleNoise.profile.increment_x}")
+            label Profile height (m)
+            input.form-control(type="text", name="height", value="#{transmissionLine.audibleNoise.profile.height}")
+            label Maximum level at border of the right-of-way (dB)
+            input.form-control(type="text", name="maximum_level_at_border", value="#{transmissionLine.audibleNoise.maximum_level_at_border}")
+          div.panel-footer
+            button.btn.btn-primary(type="submit") Save
+            span &nbsp;
+            a.btn.btn-default(href="/audiblenoise/run/transmissionline/" + transmissionLine.id) Run

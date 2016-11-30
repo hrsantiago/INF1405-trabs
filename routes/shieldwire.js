@@ -64,7 +64,7 @@ router.post('/:id/save', function(req, res, next) {
     .then(function(shieldWire) {
       return new models.Bundle().where({id: shieldWire.attributes.bundle_id}).save(bundleBody, {patch: true});
     })
-    .then(function(shieldWire) {
+    .then(function(bundle) {
       res.redirect("/shieldwire/" + req.params.id);
     })
     .catch(function(err) { next(err); });

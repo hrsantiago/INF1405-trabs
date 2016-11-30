@@ -36,7 +36,7 @@ router.get('/remove/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  new models.TransmissionLine().where({id: req.params.id}).fetch({withRelated: ['owner', 'circuits', 'shieldWires.bundle', 'structures'], require: true}).then(function(transmissionLine) {
+  new models.TransmissionLine().where({id: req.params.id}).fetch({withRelated: ['owner', 'circuits', 'shieldWires.bundle', 'structures', 'audibleNoise.profile'], require: true}).then(function(transmissionLine) {
     if(transmissionLine.related('owner').id != req.user.id)
       return res.status(400).json('Not your transmission line');
     res.render('transmissionline', { user: req.user, transmissionLine: transmissionLine.toJSON() });
