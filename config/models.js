@@ -39,6 +39,9 @@ var TransmissionLine = bookshelf.Model.extend({
   },
   audibleNoise: function() {
     return this.hasOne(AudibleNoise);
+  },
+  magneticField: function() {
+    return this.hasOne(MagneticField);
   }
 });
 
@@ -113,6 +116,16 @@ var AudibleNoise = bookshelf.Model.extend({
   }
 });
 
+var MagneticField = bookshelf.Model.extend({
+  tableName: 'magnetic_field',
+  transmissionLine: function() {
+    return this.belongsTo(TransmissionLine);
+  },
+  profile: function() {
+    return this.belongsTo(Profile);
+  }
+});
+
 var Profile = bookshelf.Model.extend({
   tableName: 'profile',
 });
@@ -129,5 +142,6 @@ module.exports = {
   Cable: Cable,
   CableType: CableType,
   AudibleNoise: AudibleNoise,
+  MagneticField: MagneticField,
   Profile: Profile,
 };

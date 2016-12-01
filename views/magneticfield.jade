@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  body
+    include projectnav
+    .container
+      h3 Magnetic Field Report
+        span &nbsp;
+        a.btn.btn-default(href="/transmissionline/" + transmissionLine.id) Back
+
+      div.panel.panel-default
+        div.panel-heading Profile
+        div.panel-body
+          table.table
+            thead
+              tr
+                th X
+                th Magnetic Field (μT)
+            tbody
+              - each pos in magneticFieldProfile
+                tr
+                  td #{pos.x}
+                  td #{pos.b.toFixed(2)}

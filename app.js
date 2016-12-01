@@ -27,7 +27,7 @@ var phase = require('./routes/phase');
 var shieldWire = require('./routes/shieldwire');
 var structure = require('./routes/structure');
 var cableType = require('./routes/cabletype');
-var audibleNoise = require('./routes/audiblenoise');
+var magneticField = require('./routes/magneticfield');
 
 var app = express();
 
@@ -64,7 +64,7 @@ app.use('/phase', phase);
 app.use('/shieldwire', shieldWire);
 app.use('/structure', structure);
 app.use('/cabletype', cableType);
-app.use('/audiblenoise', audibleNoise);
+app.use('/magneticfield', magneticField);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
