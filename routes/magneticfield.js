@@ -87,7 +87,7 @@ function calculateProfileField(transmissionLine)
     console.log(x, b);
 
     var bMax = getFieldEllipseMaximum(b);
-    magneticFieldProfile.push({x: x, b: bMax});
+    magneticFieldProfile.push({x: x, y: bMax});
   }
   return magneticFieldProfile;
 }

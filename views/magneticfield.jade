@@ -9,6 +9,36 @@ block content
         a.btn.btn-default(href="/transmissionline/" + transmissionLine.id) Back
 
       div.panel.panel-default
+        div.panel-heading Chart
+        div.panel-body
+          canvas#myChart(height="200")
+          script.
+            var ctx = document.getElementById("myChart");
+            var scatterChart = new Chart(ctx, {
+              type: 'line',
+              xAxisID: 'oi',
+              yAxisID: 'hey',
+              data: {
+                datasets: [{
+                  label: 'Magnetic Field Profile',
+                  data: !{JSON.stringify(magneticFieldProfile)}
+                }]
+              },
+              options: {
+                scales: {
+                  xAxes: [{ 
+                    type: 'linear', 
+                    position: 'bottom', 
+                    scaleLabel: { display: true, labelString: 'Profile X (m)' } 
+                  }],
+                  yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Magnetic Field (μT)' } 
+                  }],
+                }
+              }
+            });
+
+      div.panel.panel-default
         div.panel-heading Profile
         div.panel-body
           table.table
@@ -20,4 +50,4 @@ block content
               - each pos in magneticFieldProfile
                 tr
                   td #{pos.x}
-                  td #{pos.b.toFixed(2)}
+                  td #{pos.y.toFixed(2)}
